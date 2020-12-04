@@ -44,7 +44,7 @@ func (s *MovieService) Search(filter MovieFilter) ([]Movie, error) { // metodo d
 		return nil, err
 	}
 
-	rows, err := tx.Query(getMoviesQuery())
+	rows, err := tx.Query(getMoviesQuery(filter))
 
 	if err != nil {
 		logs.Error("No se pueden leer peliculas" + err.Error())
@@ -52,14 +52,16 @@ func (s *MovieService) Search(filter MovieFilter) ([]Movie, error) { // metodo d
 		return nil, err
 	}
 	var _movies []Movie
-	for rows.Next() { // leee las filas de la tabla con scan
+	// recorriendo las filas
+	for rows.Next() { // Next() devuelve true si la siguiente fila esta preparada o leida
 		var movie Movie
-		err := rows.Scan(&movie.ID, &movie.Title, &movie.Caste, &movie.ReleaseDate, &movie.Genre, &movie.Director) // lee las columnas y las convierte datatype de go
+		// Scan() lee las columnas en cada fila y las asigna los valores de la db a las variables de go o una struct
+		err := rows.Scan(&movie.ID, &movie.Title, &movie.Caste, &movie.ReleaseDate, &movie.Genre, &movie.Director)
 		if err != nil {
 			logs.Error("No se pueden leer peliculas" + err.Error())
 			return nil, err
 		}
-		_movies = append(_movies, movie)
+		_movies = append(_movies, movie) // lista que se retorna con todas las movies buscadas
 	}
 	_ = tx.Commit()
 	return _movies, nil

@@ -11,3 +11,11 @@ func SetupMoviesRoutes(app *fiber.App) {
 
 	grp.Get("/", star.SearchMovieHandler)
 }
+
+// SetupUserRoutes ...
+func SetupUserRoutes(app *fiber.App) {
+	star := start()
+	group := app.Group("/users")
+
+	group.Post("/", star.CreateUserHandler)
+}

@@ -31,6 +31,7 @@ func main() {
 		},
 	})
 	api.SetupMoviesRoutes(app)
+	api.SetupUserRoutes(app)
 	app.Listen(":3001")
 
 }
