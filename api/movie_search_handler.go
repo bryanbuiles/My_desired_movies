@@ -10,7 +10,7 @@ func (w *WebServices) SearchMovieHandler(c *fiber.Ctx) error {
 	// que contiene la interfas MovieSearch que tiene el metodo Search que recibe la struct Moviefilter que tiene los filtros
 	// para buscar, si no tiene filtros busca todos
 	res, err := w.search.Search(MovieFilter{ // asi se pasa una struct
-		Title:    c.Query("title"),
+		Title:    c.Query("title"), // este querry es diferente al de la base de datos
 		Genre:    c.Query("genre"),
 		Director: c.Query("director"),
 	})

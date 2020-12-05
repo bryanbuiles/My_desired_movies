@@ -5,7 +5,7 @@ import (
 )
 
 // SetupMoviesRoutes ruta para todas las movies
-func SetupMoviesRoutes(app *fiber.App) {
+func SetupMoviesRoutes(app *fiber.App) { // app de fiber como parametro
 	star := start()
 	grp := app.Group("/movies")
 

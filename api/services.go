@@ -6,6 +6,7 @@ import "github.com/bryanbuiles/movie_suggester/internal/database"
 // son los servicios que va a tener el programa
 type Services struct {
 	search MovieSearch
+	users  UserGateway
 }
 
 // WebServices servicios web
@@ -18,6 +19,7 @@ func NewServices() Services {
 	client := database.NewPostgresSQLClient()
 	return Services{
 		search: &MovieService{client}, // Search() es un metodo de Movie service
+		users:  &UserService{client},
 	}
 }
 

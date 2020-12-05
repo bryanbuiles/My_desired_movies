@@ -2,7 +2,9 @@ package api
 
 // esta es la funcion para filtrar la busqueda de las peliculas por director, title or genre
 
-import "strings"
+import (
+	"strings"
+)
 
 func getMoviesQuery(filter MovieFilter) string {
 	var (
@@ -50,7 +52,7 @@ func getMoviesQuery(filter MovieFilter) string {
 	return stringBuilder.String()
 }
 
-func createUserQuery() string {
-	querryInsertUser := "INSERT INTO users (username, password) VALUES (?, ?)"
-	return querryInsertUser
+// CreateUserQuery ...
+func CreateUserQuery() string {
+	return "insert into users (id, username, password) values ($1, $2, $3)"
 }
