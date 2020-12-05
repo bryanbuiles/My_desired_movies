@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/bryanbuiles/movie_suggester/api"
 	"github.com/gofiber/fiber/v2"
+	jwtware "github.com/gofiber/jwt/v2"
 )
 
 type internalError struct {
@@ -34,4 +35,7 @@ func main() {
 	api.SetupUserRoutes(app)
 	app.Listen(":3001")
 
+	app.Use(jwtware.Config{
+		SigningKey: []byte("mysecretkey"),
+	})
 }
