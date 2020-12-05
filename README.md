@@ -11,3 +11,7 @@ postgres datos
 # Docuentacion de Fiber
 
 https://docs.gofiber.io/
+
+sudo psql -h 127.0.0.1 -U bryan movie_suggester
+
+"insert into users (id, username, password) values ('" + id + "','" + user + "','" + pass + "')"

@@ -5,13 +5,14 @@ import "github.com/bryanbuiles/movie_suggester/internal/database"
 // Services struct que lista los diferentes servicios
 // son los servicios que va a tener el programa
 type Services struct {
-	search MovieSearch
-	users  UserGateway
+	search MovieSearch // get movies
+	users  UserGateway // interfas save user
 }
 
 // WebServices servicios web
 type WebServices struct {
 	Services
+	tokenKey string // se le pasa el token desde start() en las rutas
 }
 
 // NewServices Nuevo servicio
@@ -24,6 +25,6 @@ func NewServices() Services {
 }
 
 // Start comienza un nuevo servicio
-func start() *WebServices { // comieza el servicio
-	return &WebServices{NewServices()}
+func start(tokenKey string) *WebServices { // comieza el servicio
+	return &WebServices{NewServices(), tokenKey}
 }

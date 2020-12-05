@@ -18,7 +18,8 @@ type CreateUserCMD struct {
 // UserGateway ...
 type UserGateway interface {
 	SaveUser(cmd CreateUserCMD) (*UserInfo, error) // guardar usuario
-	Login()
+	Login(cmd LoginCMD) string
+	AddNextMovie(userID, movieID, comment string) error
 }
 
 // UserService conection to datebase
@@ -31,11 +32,6 @@ type UserInfo struct {
 	ID       string `json:"id"`
 	Username string `json:"username"`
 	JWT      string `json:"token"`
-}
-
-// Login ...
-func (usuario *UserService) Login() {
-
 }
 
 // SaveUser metodo para guardar usuarios
@@ -57,4 +53,22 @@ func (usuario *UserService) SaveUser(cmd CreateUserCMD) (*UserInfo, error) {
 		Username: cmd.Username,
 		JWT:      "",
 	}, nil
+}
+
+// Login return string for JWT
+func (usuario *UserService) Login(cmd LoginCMD) string {
+	var id string
+	row := usuario.QueryRow(GetLoginQuerry(), cmd.Username, cmd.Password) // solo retorna una fila
+	err := row.Scan(&id)
+	if err != nil {
+		logs.Error("Cannot querry login " + err.Error())
+		return ""
+	}
+	return id
+}
+
+// AddNextMovie Add a new movie to wish list
+func (usuario *UserService) AddNextMovie(userID, movieID, comment string) error {
+	_, err := usuario.Exec(SetWhishMovieQuery(), userID, movieID, comment)
+	return nil
 }
