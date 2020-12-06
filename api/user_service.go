@@ -19,7 +19,7 @@ type CreateUserCMD struct {
 type UserGateway interface {
 	SaveUser(cmd CreateUserCMD) (*UserInfo, error) // guardar usuario
 	Login(cmd LoginCMD) string
-	AddNextMovie(userID, movieID, comment string) error
+	AddNextMovie(userID, movieID, comment string) error // add whishlist
 }
 
 // UserService conection to datebase
@@ -70,5 +70,9 @@ func (usuario *UserService) Login(cmd LoginCMD) string {
 // AddNextMovie Add a new movie to wish list
 func (usuario *UserService) AddNextMovie(userID, movieID, comment string) error {
 	_, err := usuario.Exec(SetWhishMovieQuery(), userID, movieID, comment)
+	if err != nil {
+		logs.Error("Cannot inssert a movie in wishlist" + err.Error())
+		return err
+	}
 	return nil
 }

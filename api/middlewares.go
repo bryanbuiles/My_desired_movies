@@ -15,16 +15,17 @@ func jwtMiddleware(secret string) fiber.Handler {
 	})
 }
 
-func signToken(tokenkey string) string {
+func signToken(tokenkey, id string) string {
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
-	claims["test-name"] = "bryansito"
 	claims["admin"] = true
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+	claims["sub"] = id
 	t, err := token.SignedString([]byte(tokenkey))
+
 	if err != nil {
 		logs.Error("Create token fail" + err.Error())
 		return ""
 	}
-	return t
+	return t // token
 }

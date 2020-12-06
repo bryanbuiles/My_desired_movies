@@ -15,20 +15,23 @@ func (w *WebServices) CreateUserHandler(ctx *fiber.Ctx) error {
 	if err != nil {
 		return fiber.NewError(400, "Create user fail")
 	}
-	t := signToken(w.tokenKey)
+	t := signToken(w.tokenKey, res.ID)
 	res.JWT = t // pasandolo a la struct userinfo
 	return ctx.JSON(res)
 }
 
 // WhishMoviesHandler handler to wish movie list
 func (w *WebServices) WhishMoviesHandler(ctx *fiber.Ctx) error {
-
-	type whishMovies struct {
-		WhishList string `json:"whish_list"`
+	var cmd WishMovieCMD
+	ctx.BodyParser(&cmd)
+	err := w.users.AddNextMovie("", cmd.MovieID, cmd.Comment)
+	if err != nil {
+		return fiber.NewError(400, "cannot add movie to whish list")
 	}
-
-	return ctx.JSON(whishMovies{
-		WhishList: "movie added to the wishlist",
+	return ctx.JSON(struct { // struct anonima
+		Result string `json:"result"`
+	}{
+		Result: "Movie added to wish list",
 	})
 }
 
@@ -60,7 +63,7 @@ func (w *WebServices) LoginHandler(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.JSON(resLogHandler{
-		Token: signToken(w.tokenKey),
+		Token: signToken(w.tokenKey, id),
 	})
 }
 
@@ -68,4 +71,10 @@ func (w *WebServices) LoginHandler(ctx *fiber.Ctx) error {
 type LoginCMD struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+}
+
+// WishMovieCMD struct for wishlist
+type WishMovieCMD struct {
+	MovieID string `json:"movie_id"`
+	Comment string `json:"comment"`
 }
