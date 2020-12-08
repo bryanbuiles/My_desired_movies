@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/bryanbuiles/movie_suggester/api"
+	"github.com/bryanbuiles/movie_suggester/router"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
 type internalError struct {
@@ -31,8 +32,9 @@ func main() {
 		},
 	})
 	key := "tokenKey"
-	api.SetupMoviesRoutes(app, key)
-	api.SetupUserRoutes(app, key)
+	app.Use(recover.New()) // recover from panic, Permite que siga andando el servidor si hay un panic
+	router.SetupMoviesRoutes(app, key)
+	router.SetupUserRoutes(app, key)
 	app.Listen(":3001")
 
 }

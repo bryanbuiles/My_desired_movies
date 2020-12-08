@@ -1,4 +1,4 @@
-package api
+package userhandler
 
 import (
 	"time"
@@ -9,7 +9,8 @@ import (
 	jwtware "github.com/gofiber/jwt/v2"
 )
 
-func jwtMiddleware(secret string) fiber.Handler {
+// JwtMiddleware ...
+func JwtMiddleware(secret string) fiber.Handler {
 	return jwtware.New(jwtware.Config{
 		SigningKey: []byte(secret),
 	})
@@ -17,7 +18,7 @@ func jwtMiddleware(secret string) fiber.Handler {
 
 func signToken(tokenkey, id string) string {
 	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
+	claims := token.Claims.(jwt.MapClaims) // hash table
 	claims["admin"] = true
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 	claims["sub"] = id
@@ -28,4 +29,22 @@ func signToken(tokenkey, id string) string {
 		return ""
 	}
 	return t // token
+}
+
+func extractUserIDFromJWT(bearer, tokenkey string) string {
+	// analiza el token y lo decodifica
+	token := bearer[7:]
+	logs.Info(token)
+	toke, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+		return []byte(tokenkey), nil
+	})
+	if err != nil {
+		logs.Error("Failed parse token" + err.Error())
+		return ""
+	}
+	if toke.Valid {
+		claims := toke.Claims.(jwt.MapClaims)
+		return claims["sub"].(string)
+	}
+	return ""
 }
