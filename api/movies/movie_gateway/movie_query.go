@@ -53,3 +53,63 @@ func getMoviesQuery(filter models.MovieFilter) string {
 	}
 	return stringBuilder.String()
 }
+
+// CreateMovieQuery querry to create user in DB
+func CreateMovieQuery() string {
+	return "INSERT INTO movie (id, title, caste, release_date, genre, director) VALUES ($1, $2, $3, TO_DATE($4, 'YYYY-MM-DD'), $5, $6)"
+}
+
+// DeleteMovieQuery To delete a Movie
+func DeleteMovieQuery() string {
+	return "DELETE FROM movie WHERE id = $1"
+}
+
+// UpdateMovieQuery querry to update movie
+func UpdateMovieQuery(cmd models.Movie) string {
+	var (
+		title, caste, releaseDate, genre, director string
+		firstPartQuery                             string = "UPDATE movie SET "
+		flag                                       bool   = false
+		stringBuilder                                     = strings.Builder{} // estructura para almacenar las strings contruidas
+	)
+	stringBuilder.WriteString(firstPartQuery)
+	coma := ", "
+	if cmd.Title != "" {
+		title = "title = '" + cmd.Title + "'"
+		flag = true
+		stringBuilder.WriteString(title)
+	}
+	if cmd.Caste != "" {
+		if flag == true {
+			stringBuilder.WriteString(coma)
+		}
+		caste = "caste = '" + cmd.Caste + "'"
+		flag = true
+		stringBuilder.WriteString(caste)
+	}
+	if cmd.ReleaseDate != "" {
+		if flag == true {
+			stringBuilder.WriteString(coma)
+		}
+		releaseDate = "release_date = TO_DATE('" + cmd.ReleaseDate + "', 'YYYY-MM-DD')"
+		flag = true
+		stringBuilder.WriteString(releaseDate)
+	}
+	if cmd.Genre != "" {
+		if flag == true {
+			stringBuilder.WriteString(coma)
+		}
+		genre = "genre = '" + cmd.Genre + "'"
+		flag = true
+		stringBuilder.WriteString(genre)
+	}
+	if cmd.Director != "" {
+		if flag == true {
+			stringBuilder.WriteString(coma)
+		}
+		director = "director = '" + cmd.Director + "'"
+		stringBuilder.WriteString(director)
+	}
+	stringBuilder.WriteString(" WHERE id = '" + cmd.ID + "'")
+	return stringBuilder.String()
+}

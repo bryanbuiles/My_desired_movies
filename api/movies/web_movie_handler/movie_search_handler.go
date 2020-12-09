@@ -28,3 +28,43 @@ func (w *WebServices) SearchMovieHandler(c *fiber.Ctx) error {
 
 	return c.JSON(res)
 }
+
+// CreateMovieHandler handler to add new movie
+func (w *WebServices) CreateMovieHandler(ctx *fiber.Ctx) error {
+	var cmd models.Movie
+	err := ctx.BodyParser(&cmd)
+	if err != nil {
+		return fiber.NewError(400, "BodyParser Fail at CreateMovieHandler")
+	}
+	res, err := w.search.CreateMovie(cmd)
+	if err != nil {
+		return fiber.NewError(400, "Create Movie fail")
+	}
+	return ctx.JSON(res)
+}
+
+// DeleteMovieHandler delete movie Handler
+func (w *WebServices) DeleteMovieHandler(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	err := w.search.DeleteMovie(id)
+	if err != nil {
+		return fiber.NewError(400, "Connot Delete Movie")
+	}
+	return ctx.JSON(fiber.Map{"status": "success", "message": "Movie successfully deleted", "data": nil})
+}
+
+// UpdateMovieHandler updatemovie handler
+func (w *WebServices) UpdateMovieHandler(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	var cmd models.Movie
+	cmd.ID = id
+	err := ctx.BodyParser(&cmd)
+	if err != nil {
+		return fiber.NewError(400, "BodyParser Fail at UpdateMovieHandler")
+	}
+	err = w.search.UpdateMovie(cmd)
+	if err != nil {
+		return fiber.NewError(400, "Cannot update Movie")
+	}
+	return ctx.JSON(fiber.Map{"status": "success", "message": "Movie successfully Update", "data": nil})
+}

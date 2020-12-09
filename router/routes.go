@@ -12,6 +12,9 @@ func SetupMoviesRoutes(app *fiber.App, tokenKey string) { // app de fiber como p
 	grp := app.Group("/movies")
 
 	grp.Get("/", star.SearchMovieHandler)
+	grp.Post("/", star.CreateMovieHandler)
+	grp.Delete("/:id", star.DeleteMovieHandler)
+	grp.Patch("/:id", star.UpdateMovieHandler)
 }
 
 // SetupUserRoutes ...
