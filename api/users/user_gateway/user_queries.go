@@ -1,8 +1,6 @@
 package webusergateway
 
-// esta es la funcion para filtrar la busqueda de las peliculas por director, title or genre
-
-// CreateUserQuery ...
+// CreateUserQuery query to create an user
 func CreateUserQuery() string {
 	return "insert into users (id, username, password) values ($1, $2, $3)"
 }
@@ -15,4 +13,31 @@ func GetLoginQuerry() string {
 // SetWhishMovieQuery query to wishlists
 func SetWhishMovieQuery() string {
 	return "INSERT INTO wish_list (user_id, movie_id, comment) VALUES ($1, $2, $3)"
+}
+
+// GetUsersQuery querry to get all users
+func GetUsersQuery() string {
+	return "SELECT id, username, password FROM users"
+}
+
+func getUserQuery() string {
+	return "SELECT id, username, password FROM users WHERE username = $1"
+}
+
+// DeleteMovieQuery To delete a Movie
+func deleteUserQuery() string {
+	return "DELETE FROM users WHERE id = $1"
+}
+
+func updateUserQuery() string {
+	return "UPDATE users SET username = $2, password = $3 WHERE id = $1"
+}
+
+// GetUsersQuery querry to get user by id
+func getUsersQuerybyID() string {
+	return "SELECT username, password FROM users WHERE id = $1"
+}
+
+func getWhishMoviesQuery() string {
+	return "SELECT movie_id, comment FROM wish_list WHERE user_id = $1"
 }

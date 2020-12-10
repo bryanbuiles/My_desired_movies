@@ -11,7 +11,7 @@ var (
 	// Ltime muestra el tiempo
 )
 
-// Info manejo de  info
+// Info To display Info in stdout
 func Info(s interface{}) {
 	infoLogger.Println(s)
 }

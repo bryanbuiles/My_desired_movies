@@ -26,14 +26,14 @@ func (s *MovieService) Search(filter models.MovieFilter) ([]models.Movie, error)
 	// rollback and commit cuando queramos, nos da la versatilidad de ir para atras y adelante
 	tx, err := s.S.Begin()
 	if err != nil {
-		logs.Error("No se pudo crear transacion" + err.Error())
+		logs.Error("No se pudo crear transacion " + err.Error())
 		return nil, err
 	}
 
 	rows, err := tx.Query(getMoviesQuery(filter))
 
 	if err != nil {
-		logs.Error("No se pueden leer peliculas" + err.Error())
+		logs.Error("No se pueden leer peliculas " + err.Error())
 		tx.Rollback() // rollback de la transacion
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (s *MovieService) Search(filter models.MovieFilter) ([]models.Movie, error)
 		// Scan() lee las columnas en cada fila y las asigna los valores de la db a las variables de go o una struct
 		err := rows.Scan(&movie.ID, &movie.Title, &movie.Caste, &movie.ReleaseDate, &movie.Genre, &movie.Director)
 		if err != nil {
-			logs.Error("No se pueden leer peliculas" + err.Error())
+			logs.Error("No se pueden leer peliculas " + err.Error())
 			return nil, err
 		}
 		_movies = append(_movies, movie) // lista que se retorna con todas las movies buscadas
@@ -60,13 +60,13 @@ func (s *MovieService) CreateMovie(cmd models.Movie) (*models.Movie, error) {
 	tx, err := s.S.Begin()
 
 	if err != nil {
-		logs.Error("Begin fail at Create movie" + err.Error())
+		logs.Error("Begin fail at Create movie " + err.Error())
 		return nil, err
 	}
 	_, err = tx.Exec(CreateMovieQuery(), id, cmd.Title, cmd.Caste, cmd.ReleaseDate, cmd.Genre, cmd.Director)
 
 	if err != nil {
-		logs.Error("Cannot create a movie" + err.Error())
+		logs.Error("Cannot create a movie " + err.Error())
 		tx.Rollback()
 		return nil, err
 	}
@@ -86,12 +86,12 @@ func (s *MovieService) DeleteMovie(movieID string) error {
 	tx, err := s.S.Begin()
 
 	if err != nil {
-		logs.Error("Begin fail at Delete movie" + err.Error())
+		logs.Error("Begin fail at Delete movie " + err.Error())
 		return err
 	}
 	_, err = tx.Exec(DeleteMovieQuery(), movieID)
 	if err != nil {
-		logs.Error("error to delete movie" + err.Error())
+		logs.Error("error to delete movie " + err.Error())
 		tx.Rollback()
 		return err
 	}
@@ -103,12 +103,12 @@ func (s *MovieService) DeleteMovie(movieID string) error {
 func (s *MovieService) UpdateMovie(cmd models.Movie) error {
 	tx, err := s.S.Begin()
 	if err != nil {
-		logs.Error("Begin fail at Update movie" + err.Error())
+		logs.Error("Begin fail at Update movie " + err.Error())
 		return err
 	}
 	_, err = tx.Exec(UpdateMovieQuery(cmd))
 	if err != nil {
-		logs.Error("Error updating movie" + err.Error())
+		logs.Error("Error updating movie " + err.Error())
 		logs.Info(UpdateMovieQuery(cmd))
 		tx.Rollback()
 		return err

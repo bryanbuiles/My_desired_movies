@@ -35,6 +35,7 @@ func main() {
 	app.Use(recover.New()) // recover from panic, Permite que siga andando el servidor si hay un panic
 	router.SetupMoviesRoutes(app, key)
 	router.SetupUserRoutes(app, key)
+	router.SetupWishMoviesRoutes(app, key)
 	app.Listen(":3001")
 
 }

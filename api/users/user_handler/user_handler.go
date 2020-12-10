@@ -40,8 +40,8 @@ func (w *WebServices) WhishMoviesHandler(ctx *fiber.Ctx) error {
 
 // SetupVideo sube un video de manera estatica al endpoint movies
 func (w *WebServices) SetupVideo(ctx *fiber.Ctx) error {
-	ctx.Set("Content-Type", "video/mp4")            // setea al header un contenido
-	err := ctx.SendFile("../../../test.mp4", false) // se maneja de manera estatica
+	ctx.Set("Content-Type", "video/mp4")                                 // setea al header un contenido
+	err := ctx.SendFile("/home/kinaret/movie_suggester/test.mp4", false) // se maneja de manera estatica
 	if err != nil {
 		logs.Error("display video fail" + err.Error())
 		return fiber.NewError(400, "Display video fail")
@@ -68,4 +68,68 @@ func (w *WebServices) LoginHandler(ctx *fiber.Ctx) error {
 	return ctx.JSON(resLogHandler{
 		Token: signToken(w.tokenKey, id),
 	})
+}
+
+// GetUsersHandler habdler for gey all users
+func (w *WebServices) GetUsersHandler(ctx *fiber.Ctx) error {
+	res, err := w.users.AllUsers()
+	if err != nil {
+		return fiber.NewError(400, "cannot display users")
+	}
+	if len(res) == 0 {
+		return ctx.JSON([]interface{}{})
+	}
+	return ctx.JSON(res)
+}
+
+// GetUserByIDHandler get user by id
+func (w *WebServices) GetUserByIDHandler(ctx *fiber.Ctx) error {
+	userName := ctx.Params("username")
+	res, err := w.users.GetUser(userName)
+	if err != nil {
+		return fiber.NewError(400, "User not exist")
+	}
+	return ctx.JSON(res)
+}
+
+// DeleteUserHandler by token
+func (w *WebServices) DeleteUserHandler(ctx *fiber.Ctx) error {
+	bearer := ctx.Get("Authorization")
+	userID := extractUserIDFromJWT(bearer, w.tokenKey)
+	err := w.users.DeleteUser(userID)
+	if err != nil {
+		return fiber.NewError(400, "Delete a user fail")
+	}
+	return ctx.JSON(fiber.Map{"status": "success", "message": "User successfully deleted", "data": nil})
+}
+
+// UpdateUserHandler handler to update user
+func (w *WebServices) UpdateUserHandler(ctx *fiber.Ctx) error {
+	bearer := ctx.Get("Authorization")
+	userID := extractUserIDFromJWT(bearer, w.tokenKey)
+	var user models.User
+	err := ctx.BodyParser(&user)
+	user.ID = userID
+	if err != nil {
+		return fiber.NewError(400, "BodyParser Fail at UpdateUserHandler")
+	}
+	res, err := w.users.UpdateUser(user)
+	if err != nil {
+		return fiber.NewError(400, "Update a user fail")
+	}
+	return ctx.JSON(res)
+}
+
+// GetwishListHandler handler to get wish movies
+func (w *WebServices) GetwishListHandler(ctx *fiber.Ctx) error {
+	bearer := ctx.Get("Authorization")
+	userID := extractUserIDFromJWT(bearer, w.tokenKey)
+	res, err := w.users.GetWishMovies(userID)
+	if err != nil {
+		return fiber.NewError(400, "Get a list of wish movies fail")
+	}
+	if len(res) == 0 {
+		return ctx.JSON([]interface{}{})
+	}
+	return ctx.JSON(res)
 }

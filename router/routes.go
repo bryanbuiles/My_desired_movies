@@ -22,9 +22,21 @@ func SetupUserRoutes(app *fiber.App, tokenKey string) {
 	star := userhandler.Start(tokenKey)
 	group := app.Group("/users")
 
-	group.Get("/videos", star.SetupVideo)
+	group.Get("/", star.GetUsersHandler)
+	group.Get("/videos", star.SetupVideo) // dont move to above, conflicts wih /:username
+	group.Get("/:username", star.GetUserByIDHandler)
 	group.Post("/", star.CreateUserHandler)
 	group.Post("/login", star.LoginHandler)
 
-	group.Use(userhandler.JwtMiddleware(tokenKey)).Post("/wishlist", star.WhishMoviesHandler)
+	group.Use(userhandler.JwtMiddleware(tokenKey)).Patch("/", star.UpdateUserHandler)
+	group.Use(userhandler.JwtMiddleware(tokenKey)).Delete("/", star.DeleteUserHandler)
+}
+
+// SetupWishMoviesRoutes ...
+func SetupWishMoviesRoutes(app *fiber.App, tokenKey string) {
+	star := userhandler.Start(tokenKey)
+	group := app.Group("/wishlist")
+
+	group.Use(userhandler.JwtMiddleware(tokenKey)).Get("/", star.GetwishListHandler)
+	group.Use(userhandler.JwtMiddleware(tokenKey)).Post("/", star.WhishMoviesHandler)
 }
