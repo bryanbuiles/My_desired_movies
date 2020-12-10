@@ -15,9 +15,9 @@ type PostgresSQL struct {
 const (
 	host     = "localhost"
 	port     = 5432
-	user     = "bryan"
-	password = "babami84"
-	dbname   = "movie_suggester"
+	user     = "movie_dev"
+	password = "movie_dev_pwd"
+	dbname   = "movie_wish_db"
 )
 
 // NewPostgresSQLClient enable conection with postgres

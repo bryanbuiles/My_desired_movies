@@ -1,6 +1,6 @@
 # My desired movies - Api
 
-My Wish List api is a movie api where you can search for movies and add them to a wishlist. Additionally it allows you to add authenticated users by means of JSON Web Token (JWT). Users will be able to store their desired movies in a list so they can watch them later.
+My desired movies api is a movie api where you can search for movies and add them to a wishlist. Additionally it allows you to add authenticated users by means of JSON Web Token (JWT). Users will be able to store their desired movies in a list so they can watch them later.
 
 The api also provides the basic services of a raw api such as get, post, update, delete for movies, users and wish list.
 
@@ -44,7 +44,11 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
   ```
   ~/My_desired_movies$ go mod tidy
   ```
-- Run the database script
+- Run the script create_db in linux system
+  ```
+  ~/My_desired_movies$ ./create_db
+  ```
+- (Just for windows system) You have to create the database and the user manually and then run the posg.sql script for the database you created
 - Run the api:
   ```
   ~/My_desired_movies$ go run main.go
@@ -99,8 +103,10 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
 ## Future improvements
 
 - Add testing to the api - doing
+- Docker
 - Populate database with movies
 - Add Frontend
+- Deploy
 
 ## Bugs
 
@@ -112,4 +118,4 @@ No known bugs at this time.
 
 ## License
 
-Public Domain. No copy write protection.
+Apache-2.0 License.

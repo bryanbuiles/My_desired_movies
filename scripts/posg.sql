@@ -9,6 +9,12 @@ CREATE TABLE movie
     PRIMARY KEY(id)
 );
 
+INSERT INTO movie (id,title,caste,release_date,genre,director)
+VALUES ('1b070506-342a-11eb-adc1-0242ac120002', 'Cape Fear', 'Robert de Niro, Gregory Peck', TO_DATE('13-11-1991', 'DD MM YYYY'), 'suspense, drama', 'Martin scorses');
+
+INSERT INTO movie (id,title,caste,release_date,genre,director)
+VALUES ('229a7fa4-3426-11eb-adc1-0242ac120002', 'Blade Runner', 'Harrison Ford, Sean Young', TO_DATE('15-07-1982', 'DD MM YYYY'), 'cs fiction, drama', 'Ridley Scott');
+
 
 CREATE TABLE users
 (
