@@ -7,47 +7,44 @@ import (
 	"github.com/gofiber/fiber/v2/utils"
 )
 
-// MovieSearch es una interfas que toma el metodo de la struct MovieService
+// MovieSearch is an interface that takes methods of struct MovieService
 type MovieSearch interface {
-	Search(filter models.MovieFilter) ([]models.Movie, error) // retorn slice de estructuras
+	Search(filter models.MovieFilter) ([]models.Movie, error)
 	CreateMovie(cmd models.Movie) (*models.Movie, error)
 	DeleteMovie(movieID string) error
 	UpdateMovie(cmd models.Movie) error
 }
 
-// MovieService ...
+// MovieService .create a Db client
 type MovieService struct {
-	S *database.PostgresSQL // cliente postgres
+	DB *database.PostgresSQL // client postgres
 }
 
-// Search Busca pelicuas, si tiene filtros los aplica si no arroja todas
-func (s *MovieService) Search(filter models.MovieFilter) ([]models.Movie, error) { // metodo de MovieService
-	// transaciones vas a ser segura en multitrading
-	// rollback and commit cuando queramos, nos da la versatilidad de ir para atras y adelante
-	tx, err := s.S.Begin()
+// Search movies to get all movies or search movies with filters
+func (s *MovieService) Search(filter models.MovieFilter) ([]models.Movie, error) {
+	tx, err := s.DB.Begin()
 	if err != nil {
-		logs.Error("No se pudo crear transacion " + err.Error())
+		logs.Error("Begin() fail at Search() " + err.Error())
 		return nil, err
 	}
 
 	rows, err := tx.Query(getMoviesQuery(filter))
 
 	if err != nil {
-		logs.Error("No se pueden leer peliculas " + err.Error())
-		tx.Rollback() // rollback de la transacion
+		logs.Error("Cannot display movies " + err.Error())
+		tx.Rollback() // rollback the query
 		return nil, err
 	}
 	var _movies []models.Movie
-	// recorriendo las filas
-	for rows.Next() { // Next() devuelve true si la siguiente fila esta preparada o leida
+	for rows.Next() { // Next() return true if the next row is readed
 		var movie models.Movie
-		// Scan() lee las columnas en cada fila y las asigna los valores de la db a las variables de go o una struct
+		// Scan() read the columns in each row and assigns the values of columns to variables or structs parameters of go
 		err := rows.Scan(&movie.ID, &movie.Title, &movie.Caste, &movie.ReleaseDate, &movie.Genre, &movie.Director)
 		if err != nil {
-			logs.Error("No se pueden leer peliculas " + err.Error())
+			logs.Error("Cannot display movies " + err.Error())
 			return nil, err
 		}
-		_movies = append(_movies, movie) // lista que se retorna con todas las movies buscadas
+		_movies = append(_movies, movie)
 	}
 	tx.Commit()
 	return _movies, nil
@@ -57,10 +54,10 @@ func (s *MovieService) Search(filter models.MovieFilter) ([]models.Movie, error)
 func (s *MovieService) CreateMovie(cmd models.Movie) (*models.Movie, error) {
 	id := utils.UUID()
 
-	tx, err := s.S.Begin()
+	tx, err := s.DB.Begin()
 
 	if err != nil {
-		logs.Error("Begin fail at Create movie " + err.Error())
+		logs.Error("Begin() fail at Create movie " + err.Error())
 		return nil, err
 	}
 	_, err = tx.Exec(CreateMovieQuery(), id, cmd.Title, cmd.Caste, cmd.ReleaseDate, cmd.Genre, cmd.Director)
@@ -83,10 +80,10 @@ func (s *MovieService) CreateMovie(cmd models.Movie) (*models.Movie, error) {
 
 // DeleteMovie to delete a movie
 func (s *MovieService) DeleteMovie(movieID string) error {
-	tx, err := s.S.Begin()
+	tx, err := s.DB.Begin()
 
 	if err != nil {
-		logs.Error("Begin fail at Delete movie " + err.Error())
+		logs.Error("Begin() fail at Delete movie " + err.Error())
 		return err
 	}
 	_, err = tx.Exec(DeleteMovieQuery(), movieID)
@@ -101,9 +98,9 @@ func (s *MovieService) DeleteMovie(movieID string) error {
 
 // UpdateMovie update a movie value
 func (s *MovieService) UpdateMovie(cmd models.Movie) error {
-	tx, err := s.S.Begin()
+	tx, err := s.DB.Begin()
 	if err != nil {
-		logs.Error("Begin fail at Update movie " + err.Error())
+		logs.Error("Begin() fail at Update movie " + err.Error())
 		return err
 	}
 	_, err = tx.Exec(UpdateMovieQuery(cmd))

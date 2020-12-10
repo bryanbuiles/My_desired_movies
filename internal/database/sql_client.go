@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	_ "github.com/lib/pq" //conection to postgres
+	_ "github.com/lib/pq" //conection to postgres, The _ starts the init
 )
 
 // PostgresSQL struct conection

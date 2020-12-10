@@ -1,34 +1,34 @@
 package moviesgateway
 
-// esta es la funcion para filtrar la busqueda de las peliculas por director, title or genre
-
 import (
 	"strings"
 
 	"github.com/bryanbuiles/movie_suggester/api/movies/models"
 )
 
+// create a string that search a movie by director,genre or director
 func getMoviesQuery(filter models.MovieFilter) string {
 	var (
 		director, genre, title string
 		clause                 bool   = false
 		firstPartQuery         string = "select id, title, caste, release_date, genre, director from movie"
-		stringBuilder                 = strings.Builder{} // estructura para almacenar las strings contruidas
+		stringBuilder                 = strings.Builder{} // strings.Builder build strings step by step
 	)
 	stringBuilder.WriteString(firstPartQuery)
 
-	switch {
-	case filter.Director != "":
+	if filter.Director != "" {
 		director = "director like '%" + filter.Director + "%'"
 		clause = true
-	case filter.Genre != "":
+	}
+
+	if filter.Genre != "" {
 		genre = "genre like '%" + filter.Genre + "%'"
 		clause = true
-	case filter.Title != "":
+	}
+
+	if filter.Title != "" {
 		title = "title like '%" + filter.Title + "%'"
 		clause = true
-	default:
-		return stringBuilder.String() // retorna el string acomulado
 	}
 	if clause {
 		var flag int
@@ -50,6 +50,7 @@ func getMoviesQuery(filter models.MovieFilter) string {
 			}
 			stringBuilder.WriteString(title)
 		}
+		return stringBuilder.String()
 	}
 	return stringBuilder.String()
 }
@@ -70,7 +71,7 @@ func UpdateMovieQuery(cmd models.Movie) string {
 		title, caste, releaseDate, genre, director string
 		firstPartQuery                             string = "UPDATE movie SET "
 		flag                                       bool   = false
-		stringBuilder                                     = strings.Builder{} // estructura para almacenar las strings contruidas
+		stringBuilder                                     = strings.Builder{}
 	)
 	stringBuilder.WriteString(firstPartQuery)
 	coma := ", "

@@ -71,6 +71,16 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
 - GET /users/userID - Get an user by id
 - POST /users - Create an user
 - POST /users/login - Login an user - provide a Bearer token
+  Example:
+  ```
+  curl -X POST http://0.0.0.0:3001/users/login -H "Content-Type: application/json" -d '{"username": "bryan", "password": "123456"}'
+  ```
+  Output:
+  ```
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9. eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNjA3OTAyMzUxLCJzdWIiOiJmMjllYzU0Ni0wODQ3LTQ5ZGMtYTFiMy0xNGJmZDNkYjRkZTAifQ.9RkkSv9JxevTvxm-22vJig47woFqz5-0R3rxgbcpXZQ"
+  }
+  ```
 - PATCH /users/userID - Update an user, needs the bearer token
 - DELETE PATCH /users/userID - Delete an user, needs the bearer token
 
@@ -78,7 +88,17 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
 
 - GET /wishlist - all wish movies by user, needs the bearer token
 - POST /wishlist - Add a new wish movie to the list, needs the bearer token
-- DELET /wishlist/movieID - Delete a wish movie in the user wish list, needs the bearer token
+
+  Example:
+
+  ```
+  curl -X POST http://0.0.0.0:3001/wishlist -H "Content-Type: application/json" -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNjA3OTAxMzEzLCJzdWIiOiJmMjllYzU0Ni0wODQ3LTQ5ZGMtYTFiMy0xNGJmZDNkYjRkZTAifQ.gPdIREp7Ab2oljOkCfvApnNxal0XBNxNNfrybSbJa-I" -d '{"movie_id": "1b070506-342a-11eb-adc1-0242ac120002", "comment": "Me la vere despues"}'
+
+  ```
+
+  Output: `{"result":"Movie added to wish list"}`
+
+- DELETE /wishlist/movieID - Delete a wish movie in the user wish list, needs the bearer token
 
 ## Folder descriptions
 
@@ -114,7 +134,7 @@ No known bugs at this time.
 
 ## Authors
 
-- Bryan Builes - [Github](https://github.com/bryanbuiles) / [Twitter](https://twitter.com/bryan_builes) / [Linkedin](https://www.linkedin.com/in/brayam-steven-builes-echavarria/)
+- Brayam Builes - [Github](https://github.com/bryanbuiles) / [Twitter](https://twitter.com/bryan_builes) / [Linkedin](https://www.linkedin.com/in/brayam-steven-builes-echavarria/)
 
 ## License
 

@@ -38,6 +38,7 @@ func getUsersQuerybyID() string {
 	return "SELECT username, password FROM users WHERE id = $1"
 }
 
+// getWhishMoviesQuery query to display the movies included in the wishes list movie of an user
 func getWhishMoviesQuery() string {
 	return "SELECT wish_list.movie_id, title, caste, release_date, genre, director, wish_list.comment " +
 		"FROM movie INNER JOIN wish_list ON movie.id = wish_list.movie_id WHERE wish_list.user_id = $1"

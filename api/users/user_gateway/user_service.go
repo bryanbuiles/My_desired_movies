@@ -9,9 +9,9 @@ import (
 	"github.com/gofiber/fiber/v2/utils"
 )
 
-// UserGateway ...
+// UserGateway .all mehods and services of users
 type UserGateway interface {
-	SaveUser(cmd models.CreateUserCMD) (*models.UserInfo, error) // guardar usuario
+	SaveUser(cmd models.CreateUserCMD) (*models.UserInfo, error)
 	Login(cmd models.LoginCMD) string
 	AddNextMovie(userID, movieID, comment string) error
 	AllUsers() ([]models.User, error)
@@ -27,11 +27,11 @@ type UserService struct {
 	DB *database.PostgresSQL
 }
 
-// SaveUser metodo para guardar usuarios
+// SaveUser save users in database
 func (usuario *UserService) SaveUser(cmd models.CreateUserCMD) (*models.UserInfo, error) {
-	if cmd.RepeatPassword != cmd.Password { // si las contraseñas no coiciden
-		logs.Error("contraseñas no coiciden")
-		return nil, fmt.Errorf("contraseñas no coiciden")
+	if cmd.RepeatPassword != cmd.Password { // if the passwords are differents
+		logs.Error("Different passwords in creating user ")
+		return nil, fmt.Errorf("Different passwords in creating user")
 	}
 
 	id := utils.UUID()
@@ -42,7 +42,7 @@ func (usuario *UserService) SaveUser(cmd models.CreateUserCMD) (*models.UserInfo
 		return nil, err
 	}
 
-	_, err = tx.Exec(CreateUserQuery(), id, cmd.Username, cmd.Password) // cmd.Username, cmd.Password son los values del exec
+	_, err = tx.Exec(CreateUserQuery(), id, cmd.Username, cmd.Password)
 
 	if err != nil {
 		logs.Error("Cannot insert user " + err.Error())
@@ -65,7 +65,7 @@ func (usuario *UserService) Login(cmd models.LoginCMD) string {
 		logs.Error("Fail Begin() at Login " + err.Error())
 		return ""
 	}
-	row := tx.QueryRow(GetLoginQuerry(), cmd.Username, cmd.Password) // solo retorna una fila
+	row := tx.QueryRow(GetLoginQuerry(), cmd.Username, cmd.Password)
 
 	err = row.Scan(&id)
 	if err != nil {
@@ -104,7 +104,7 @@ func (usuario *UserService) AllUsers() ([]models.User, error) {
 	rows, err := tx.Query(GetUsersQuery())
 	if err != nil {
 		logs.Error("Cannot read users " + err.Error())
-		tx.Rollback() // rollback de la transacion
+		tx.Rollback()
 		return nil, err
 	}
 	var _users []models.User
@@ -159,7 +159,7 @@ func (usuario *UserService) DeleteUser(userID string) error {
 	return nil
 }
 
-// UpdateUser update pass o username to User
+// UpdateUser update password or username of an User
 func (usuario *UserService) UpdateUser(cmd models.User) (*models.User, error) {
 	tx, err := usuario.DB.Begin()
 	if err != nil {
@@ -202,7 +202,7 @@ func (usuario *UserService) GetWishMovies(userID string) ([]models.WishMovie, er
 	rows, err := tx.Query(getWhishMoviesQuery(), userID)
 	if err != nil {
 		logs.Error("Cannot read Wish Movies " + err.Error())
-		tx.Rollback() // rollback de la transacion
+		tx.Rollback()
 		return nil, err
 	}
 	var _wishMovies []models.WishMovie

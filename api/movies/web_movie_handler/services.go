@@ -5,26 +5,26 @@ import (
 	"github.com/bryanbuiles/movie_suggester/internal/database"
 )
 
-// Services struct que lista los diferentes servicios
-// son los servicios que va a tener el programa
+// Services struct list all services taht will have movies
+// is a struct of movieSearch interface
 type Services struct {
-	search moviesgateway.MovieSearch // get movies
+	search moviesgateway.MovieSearch
 }
 
-// WebServices servicios web
+// WebServices ...
 type WebServices struct {
 	Services
 }
 
-// NewServices Nuevo servicio
+// NewServices New service
 func NewServices() Services {
 	client := database.NewPostgresSQLClient()
 	return Services{
-		search: &moviesgateway.MovieService{S: client}, // Search() es un metodo de Movie service
+		search: &moviesgateway.MovieService{DB: client}, // Search() is a method of Movie service
 	}
 }
 
-// Start comienza un nuevo servicio
-func Start() *WebServices { // comieza el servicio
+// Start starts a new service
+func Start() *WebServices {
 	return &WebServices{NewServices()}
 }

@@ -16,9 +16,10 @@ func JwtMiddleware(secret string) fiber.Handler {
 	})
 }
 
+// signToken firm and return the token
 func signToken(tokenkey, id string) string {
 	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims) // hash table
+	claims := token.Claims.(jwt.MapClaims) // Mapclaims is a hash table
 	claims["admin"] = true
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 	claims["sub"] = id
@@ -31,8 +32,10 @@ func signToken(tokenkey, id string) string {
 	return t // token
 }
 
+// extractUserIDFromJWT extrct the id using JWT
 func extractUserIDFromJWT(bearer, tokenkey string) string {
-	// analiza el token y lo decodifica
+	// bearrer is a value of http request HEader Authorization
+	// example: Bearer eyJhbGciOiJIUzI1Ni .... the other part is the token
 	token := bearer[7:]
 	logs.Info(token)
 	toke, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
