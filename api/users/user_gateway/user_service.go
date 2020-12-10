@@ -18,7 +18,8 @@ type UserGateway interface {
 	GetUser(id string) (*models.User, error)
 	DeleteUser(userID string) error
 	UpdateUser(cmd models.User) (*models.User, error)
-	GetWishMovies(userID string) ([]models.WishMovieCMD, error)
+	GetWishMovies(userID string) ([]models.WishMovie, error)
+	DeleteWishMovie(userID, movieID string) error
 }
 
 // UserService conection to datebase
@@ -192,7 +193,7 @@ func (usuario *UserService) UpdateUser(cmd models.User) (*models.User, error) {
 }
 
 // GetWishMovies Get a list of whish Movies
-func (usuario *UserService) GetWishMovies(userID string) ([]models.WishMovieCMD, error) {
+func (usuario *UserService) GetWishMovies(userID string) ([]models.WishMovie, error) {
 	tx, err := usuario.DB.Begin()
 	if err != nil {
 		logs.Error("Begin() fail at GetWishMovies " + err.Error())
@@ -204,10 +205,11 @@ func (usuario *UserService) GetWishMovies(userID string) ([]models.WishMovieCMD,
 		tx.Rollback() // rollback de la transacion
 		return nil, err
 	}
-	var _wishMovies []models.WishMovieCMD
-	var wishMovies models.WishMovieCMD
+	var _wishMovies []models.WishMovie
+	var wishMovies models.WishMovie
 	for rows.Next() {
-		err := rows.Scan(&wishMovies.MovieID, &wishMovies.Comment)
+		err := rows.Scan(&wishMovies.MovieID, &wishMovies.Title, &wishMovies.Caste,
+			&wishMovies.ReleaseDate, &wishMovies.Genre, &wishMovies.Director, &wishMovies.Comment)
 		if err != nil {
 			logs.Error("Cannot asign wish movie to struct " + err.Error())
 			return nil, err
@@ -216,4 +218,21 @@ func (usuario *UserService) GetWishMovies(userID string) ([]models.WishMovieCMD,
 	}
 	tx.Commit()
 	return _wishMovies, nil
+}
+
+// DeleteWishMovie to delete a wish Movie
+func (usuario *UserService) DeleteWishMovie(userID, movieID string) error {
+	tx, err := usuario.DB.Begin()
+	if err != nil {
+		logs.Error("Begin() fail at Delete wish movie " + err.Error())
+		return err
+	}
+	_, err = tx.Exec(deleteWishMovieQuery(), userID, movieID)
+	if err != nil {
+		logs.Error("Error deleting wish movie " + err.Error())
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
 }

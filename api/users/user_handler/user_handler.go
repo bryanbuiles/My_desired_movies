@@ -58,7 +58,7 @@ func (w *WebServices) LoginHandler(ctx *fiber.Ctx) error {
 	}
 	id := w.users.Login(cmdLogin)
 	if id == "" {
-		return fiber.NewError(400, "user not found")
+		return fiber.NewError(400, "user not found or id wrong")
 	}
 
 	type resLogHandler struct {
@@ -132,4 +132,16 @@ func (w *WebServices) GetwishListHandler(ctx *fiber.Ctx) error {
 		return ctx.JSON([]interface{}{})
 	}
 	return ctx.JSON(res)
+}
+
+// DeleteWishMovieHandler handler to delete wish movie
+func (w *WebServices) DeleteWishMovieHandler(ctx *fiber.Ctx) error {
+	bearer := ctx.Get("Authorization")
+	movieID := ctx.Params("movieID")
+	userID := extractUserIDFromJWT(bearer, w.tokenKey)
+	err := w.users.DeleteWishMovie(userID, movieID)
+	if err != nil {
+		return fiber.NewError(400, "Delete a wish movie fail")
+	}
+	return ctx.JSON(fiber.Map{"status": "success", "message": "Wish movie successfully deleted", "data": nil})
 }

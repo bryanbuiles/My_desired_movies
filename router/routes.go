@@ -39,4 +39,5 @@ func SetupWishMoviesRoutes(app *fiber.App, tokenKey string) {
 
 	group.Use(userhandler.JwtMiddleware(tokenKey)).Get("/", star.GetwishListHandler)
 	group.Use(userhandler.JwtMiddleware(tokenKey)).Post("/", star.WhishMoviesHandler)
+	group.Use(userhandler.JwtMiddleware(tokenKey)).Delete("/:movieID", star.DeleteWishMovieHandler)
 }

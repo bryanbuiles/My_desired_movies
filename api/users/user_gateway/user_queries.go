@@ -39,5 +39,11 @@ func getUsersQuerybyID() string {
 }
 
 func getWhishMoviesQuery() string {
-	return "SELECT movie_id, comment FROM wish_list WHERE user_id = $1"
+	return "SELECT wish_list.movie_id, title, caste, release_date, genre, director, wish_list.comment " +
+		"FROM movie INNER JOIN wish_list ON movie.id = wish_list.movie_id WHERE wish_list.user_id = $1"
+}
+
+// DeleteMovieQuery To delete a Movie
+func deleteWishMovieQuery() string {
+	return "DELETE FROM wish_list WHERE user_id = $1 and movie_id = $2"
 }
