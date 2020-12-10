@@ -1,57 +1,80 @@
-# Pet tracker - Web application
+# My desired movies - Api
 
-Pet tracker is a web application developed for the company infinity systems. The objective of Pet tracker is to provide a service or platform to locate a lost pet on a map previously registered by the user. Additionally, it will have forms and detailed information management for each pet so that it can be easily identified.
+My Wish List api is a movie api where you can search for movies and add them to a wishlist. Additionally it allows you to add authenticated users by means of JSON Web Token (JWT). Users will be able to store their desired movies in a list so they can watch them later.
 
-## Functionalities of this web application:
+The api also provides the basic services of a raw api such as get, post, update, delete for movies, users and wish list.
 
-- Register or log in to a user account
-- A home page that will show all the information of the web application and the product.
-- A user web page that displays a user's pets and allows the user to register a pet.
-- Settings Web page for the pet and user to update their information respectively
-- A map web page that will allow you to locate a pet.
+The api is still under development and the database is not populate with movies yet.
+
+## Functionalities of this api:
+
+- Create a user and movies
+- Login with JWT (JSON Web Token).
+- Create a list with my desired movies to watch later.
+- Supports the functionality of a crud rest api (Get, Post, Put, Delete).
 
 ## Table of Content
 
 - [Environment](#environment-and-requirements)
-- [Run web application](#Run-web-application-locally)
-- [Visit our web-site](#Visit-our-web-site)
+- [Run api locally](#Run-web-application-locally)
+- [Endpoints](#Visit-our-web-site)
 - [Folder Descriptions](#folder-descriptions)
+- [Future improvements](#Future-improvements)
 - [Bugs](#bugs)
 - [Authors](#authors)
 - [License](#license)
 
 ## Environment and requirements
 
-This web-application was interpreted/tested on Ubuntu 20.04 LTS using python3 (version 3.8.5) and javascript
+This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (version 1.15.6)
 
 ### General Requirements
 
-- SQLAlquemy
-- flask
-- jinja2
+- jwt: github.com/gofiber/jwt/v2
+- fiber: github.com/gofiber/fiber/v2
+- Database managment: github.com/lib/pq
 - postgrepSQL
-- Auth0
-- nodejs
-- Bootstrap
-- Google maps API
+- Goland
 
-## Run web application locally
+## Run api locally
 
-- Clone this repository: `git clone "https://github.com/Nicolanz/pet_tracker.git"`
-- Access to AirBnb directory: `cd pet_tracker`
-- Run flask instance for the web-site:
+- Clone this repository: `git clone "https://github.com/bryanbuiles/My_desired_movies.git"`
+- Access to My desired movies directory: `cd My_desired_movies/cmd`
+- Update dependecies
   ```
-  ~/pet-tracker$ POSTGREP_USER=cobra_team POSTGREP_PWD=cobra POSTGREP_HOST=127.0.0.1 POSTGREP_DB=pet_db python3 -m web_dynamic.server
+  ~/My_desired_movies$ go mod tidy
   ```
-- Run the api flask instance in another terminal:
+- Run the database script
+- Run the api:
   ```
-  ~/pet-tracker$ POSTGREP_USER=cobra_team POSTGREP_PWD=cobra POSTGREP_HOST=127.0.0.1 POSTGREP_DB=pet_db python3 -m api.v1.app
+  ~/My_desired_movies$ go run main.go
   ```
-- In your browser type `localhost:5001` to go to the home page.
+- Request the endpoints with curl or postmant:
 
-## Visit our web site
+## Endpoints
 
-To avoid running the entire web application locally, you can simply visit our website at `http://34.75.204.221/`
+### Movie endpoints:
+
+- GET /movies - ALL movies
+- GET /movies?director=George Lucas - Search for any parameter in movies
+- POST /movies - Create a movie
+- PATCH /movies/movieID - Update a movie
+- DELETE /movies/movieID - delete a movie
+
+### User endpoints:
+
+- GET /users - All users
+- GET /users/userID - Get an user by id
+- POST /users - Create an user
+- POST /users/login - Login an user - provide a Bearer token
+- PATCH /users/userID - Update an user, needs the bearer token
+- DELETE PATCH /users/userID - Delete an user, needs the bearer token
+
+### wish list movies endpoints:
+
+- GET /wishlist - all wish movies by user, needs the bearer token
+- POST /wishlist - Add a new wish movie to the list, needs the bearer token
+- DELET /wishlist/movieID - Delete a wish movie in the user wish list, needs the bearer token
 
 ## Folder descriptions
 
@@ -72,6 +95,12 @@ To avoid running the entire web application locally, you can simply visit our we
 | internal/logs                | Logs an errors                   |
 | routes                       | Routes and endpoints for the api |
 | scripts                      | Database scripts                 |
+
+## Future improvements
+
+- Add testing to the api - doing
+- Populate database with movies
+- Add Frontend
 
 ## Bugs
 
