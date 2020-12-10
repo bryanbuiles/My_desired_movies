@@ -60,7 +60,24 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
 ### Movie endpoints:
 
 - GET /movies - ALL movies
-- GET /movies?director=George Lucas - Search for any parameter in movies
+- GET /movies?director=Martin - Search for any parameter in movies
+  Example:
+  ```
+  curl -X GET http://0.0.0.0:3001/movies?director=Martin
+  ```
+  Output:
+  ```
+  [
+    {
+        "id": "1b070506-342a-11eb-adc1-0242ac120002",
+        "title": "Cape Fear",
+        "caste": "Robert de Niro, Gregory Peck",
+        "release_date": "1991-11-13T00:00:00Z",
+        "genre": "suspense, drama",
+        "director": "Martin scorses"
+    }
+  ]
+  ```
 - POST /movies - Create a movie
 - PATCH /movies/movieID - Update a movie
 - DELETE /movies/movieID - delete a movie
