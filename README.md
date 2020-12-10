@@ -61,11 +61,15 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
 
 - GET /movies - ALL movies
 - GET /movies?director=Martin - Search for any parameter in movies
+
   Example:
+
   ```
   curl -X GET http://0.0.0.0:3001/movies?director=Martin
   ```
+
   Output:
+
   ```
   [
     {
@@ -78,6 +82,7 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
     }
   ]
   ```
+
 - POST /movies - Create a movie
 - PATCH /movies/movieID - Update a movie
 - DELETE /movies/movieID - delete a movie
@@ -88,16 +93,21 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
 - GET /users/userID - Get an user by id
 - POST /users - Create an user
 - POST /users/login - Login an user - provide a Bearer token
+
   Example:
+
   ```
   curl -X POST http://0.0.0.0:3001/users/login -H "Content-Type: application/json" -d '{"username": "bryan", "password": "123456"}'
   ```
+
   Output:
+
   ```
   {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9. eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNjA3OTAyMzUxLCJzdWIiOiJmMjllYzU0Ni0wODQ3LTQ5ZGMtYTFiMy0xNGJmZDNkYjRkZTAifQ.9RkkSv9JxevTvxm-22vJig47woFqz5-0R3rxgbcpXZQ"
   }
   ```
+
 - PATCH /users/userID - Update an user, needs the bearer token
 - DELETE PATCH /users/userID - Delete an user, needs the bearer token
 
