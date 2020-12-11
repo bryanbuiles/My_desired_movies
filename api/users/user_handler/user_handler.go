@@ -120,11 +120,11 @@ func (w *WebServices) UpdateUserHandler(ctx *fiber.Ctx) error {
 	return ctx.JSON(res)
 }
 
-// GetwishListHandler handler to get wish movies
-func (w *WebServices) GetwishListHandler(ctx *fiber.Ctx) error {
+// GetwishedListHandler handler to get wish movies
+func (w *WebServices) GetwishedListHandler(ctx *fiber.Ctx) error {
 	bearer := ctx.Get("Authorization")
 	userID := extractUserIDFromJWT(bearer, w.tokenKey)
-	res, err := w.users.GetWishMovies(userID)
+	res, err := w.users.GetWishedMovies(userID)
 	if err != nil {
 		return fiber.NewError(400, "Get a list of wish movies fail")
 	}
@@ -134,12 +134,12 @@ func (w *WebServices) GetwishListHandler(ctx *fiber.Ctx) error {
 	return ctx.JSON(res)
 }
 
-// DeleteWishMovieHandler handler to delete wish movie
-func (w *WebServices) DeleteWishMovieHandler(ctx *fiber.Ctx) error {
+// DeleteWishedMovieHandler handler to delete wish movie
+func (w *WebServices) DeleteWishedMovieHandler(ctx *fiber.Ctx) error {
 	bearer := ctx.Get("Authorization")
 	movieID := ctx.Params("movieID")
 	userID := extractUserIDFromJWT(bearer, w.tokenKey)
-	err := w.users.DeleteWishMovie(userID, movieID)
+	err := w.users.DeleteWishedMovie(userID, movieID)
 	if err != nil {
 		return fiber.NewError(400, "Delete a wish movie fail")
 	}

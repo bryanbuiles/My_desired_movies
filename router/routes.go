@@ -35,9 +35,9 @@ func SetupUserRoutes(app *fiber.App, tokenKey string) {
 // SetupWishMoviesRoutes ...
 func SetupWishMoviesRoutes(app *fiber.App, tokenKey string) {
 	star := userhandler.Start(tokenKey)
-	group := app.Group("/wishlist")
+	group := app.Group("/wishedlist")
 
-	group.Use(userhandler.JwtMiddleware(tokenKey)).Get("/", star.GetwishListHandler)
+	group.Use(userhandler.JwtMiddleware(tokenKey)).Get("/", star.GetwishedListHandler)
 	group.Use(userhandler.JwtMiddleware(tokenKey)).Post("/", star.WhishMoviesHandler)
-	group.Use(userhandler.JwtMiddleware(tokenKey)).Delete("/:movieID", star.DeleteWishMovieHandler)
+	group.Use(userhandler.JwtMiddleware(tokenKey)).Delete("/:movieID", star.DeleteWishedMovieHandler)
 }

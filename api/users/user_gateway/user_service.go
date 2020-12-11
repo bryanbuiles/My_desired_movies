@@ -18,8 +18,8 @@ type UserGateway interface {
 	GetUser(id string) (*models.User, error)
 	DeleteUser(userID string) error
 	UpdateUser(cmd models.User) (*models.User, error)
-	GetWishMovies(userID string) ([]models.WishMovie, error)
-	DeleteWishMovie(userID, movieID string) error
+	GetWishedMovies(userID string) ([]models.WishMovie, error)
+	DeleteWishedMovie(userID, movieID string) error
 }
 
 // UserService conection to datebase
@@ -192,8 +192,8 @@ func (usuario *UserService) UpdateUser(cmd models.User) (*models.User, error) {
 	return &user, nil
 }
 
-// GetWishMovies Get a list of whish Movies
-func (usuario *UserService) GetWishMovies(userID string) ([]models.WishMovie, error) {
+// GetWishedMovies Get a list of whish Movies
+func (usuario *UserService) GetWishedMovies(userID string) ([]models.WishMovie, error) {
 	tx, err := usuario.DB.Begin()
 	if err != nil {
 		logs.Error("Begin() fail at GetWishMovies " + err.Error())
@@ -220,8 +220,8 @@ func (usuario *UserService) GetWishMovies(userID string) ([]models.WishMovie, er
 	return _wishMovies, nil
 }
 
-// DeleteWishMovie to delete a wish Movie
-func (usuario *UserService) DeleteWishMovie(userID, movieID string) error {
+// DeleteWishedMovie to delete a wish Movie
+func (usuario *UserService) DeleteWishedMovie(userID, movieID string) error {
 	tx, err := usuario.DB.Begin()
 	if err != nil {
 		logs.Error("Begin() fail at Delete wish movie " + err.Error())

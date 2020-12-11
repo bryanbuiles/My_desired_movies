@@ -16,8 +16,8 @@ The api is still under development and the database is not populate with movies 
 ## Table of Content
 
 - [Environment](#environment-and-requirements)
-- [Run api locally](#Run-web-application-locally)
-- [Endpoints](#Visit-our-web-site)
+- [Run api locally](#Run-api-locally)
+- [Endpoints](#Endpoints)
 - [Folder Descriptions](#folder-descriptions)
 - [Future improvements](#Future-improvements)
 - [Bugs](#bugs)
@@ -44,7 +44,7 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
   ```
   ~/My_desired_movies$ go mod tidy
   ```
-- Run the script create_db in linux system
+- Run the script create_db in linux system, enter the password `movie_dev_pwd`
   ```
   ~/My_desired_movies$ ./create_db
   ```
@@ -60,7 +60,7 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
 ### Movie endpoints:
 
 - GET /movies - ALL movies
-- GET /movies?director=Martin - Search for any parameter in movies
+- GET /movies?director=Martin - Search movies looking for title, genre or director
 
   Example:
 
@@ -84,14 +84,31 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
   ```
 
 - POST /movies - Create a movie
-- PATCH /movies/movieID - Update a movie
-- DELETE /movies/movieID - delete a movie
+- PATCH /movies/{movieID} - Update a movie
+- DELETE /movies/{movieID} - delete a movie
 
 ### User endpoints:
 
 - GET /users - All users
-- GET /users/userID - Get an user by id
+- GET /users/{userID} - Get an user by id
 - POST /users - Create an user
+
+  Example:
+
+  ```
+  curl -X POST http://0.0.0.0:3001/users/login -H "Content-Type: application/json" -d '{"username": "bryan", "password": "123456", "repeat_password": "123456"}'
+  ```
+
+  Output:
+
+  ```
+  {
+    "id": "e175edba-9116-4ec7-bfe2-cf32a34f98e0",
+    "username": "bryan",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNjA3OTc5NzM4LCJzdWIiOiJlMTc1ZWRiYS05MTE2LTRlYzctYmZlMi1jZjMyYTM0Zjk4ZTAifQ.cjkDHJACLHjqsP-5ya24mXsHytShctDj-WJptaJxoJY"
+  }
+  ```
+
 - POST /users/login - Login an user - provide a Bearer token
 
   Example:
@@ -108,13 +125,13 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
   }
   ```
 
-- PATCH /users/userID - Update an user, needs the bearer token
-- DELETE PATCH /users/userID - Delete an user, needs the bearer token
+- PATCH /users/{userID} - Update an user, needs the bearer token
+- DELETE PATCH /users/{userID} - Delete an user, needs the bearer token
 
-### wish list movies endpoints:
+### desired list movies endpoints:
 
-- GET /wishlist - all wish movies by user, needs the bearer token
-- POST /wishlist - Add a new wish movie to the list, needs the bearer token
+- GET /wishedlist - all wish movies by user, needs the bearer token
+- POST /wishedlist - Add a new wish movie to the list, needs the bearer token
 
   Example:
 
@@ -125,7 +142,7 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
 
   Output: `{"result":"Movie added to wish list"}`
 
-- DELETE /wishlist/movieID - Delete a wish movie in the user wish list, needs the bearer token
+- DELETE /wishedlist/{movieID} - Delete a wish movie in the user wish list, needs the bearer token
 
 ## Folder descriptions
 
@@ -149,10 +166,10 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
 
 ## Future improvements
 
-- Add testing to the api - doing
+- Add testing to the api - On process
 - Docker
 - Populate database with movies
-- Add Frontend
+- Add Fronten
 - Deploy
 
 ## Bugs
