@@ -39,5 +39,4 @@ func main() {
 	router.SetupUserRoutes(app, key)
 	router.SetupWishMoviesRoutes(app, key)
 	app.Listen(":3001")
-
 }

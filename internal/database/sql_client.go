@@ -13,17 +13,17 @@ type PostgresSQL struct {
 }
 
 const (
-	host     = "localhost"
+	host = "localhost"
+	//host     = "database"
 	port     = 5432
 	user     = "movie_dev"
 	password = "movie_dev_pwd"
-	dbname   = "movie_wish_db"
+	dbname   = "movie_dev"
 )
 
 // NewPostgresSQLClient enable conection with postgres
 func NewPostgresSQLClient() *PostgresSQL {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s "+
-		"sslmode=disable", host, port, user, password, dbname)
+	psqlInfo := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable", user, password, host, port, dbname)
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		panic(err)

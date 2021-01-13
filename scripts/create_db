@@ -3,6 +3,6 @@
 # Run this script to create a user database and tables
 
 echo "CREATE USER movie_dev WITH PASSWORD 'movie_dev_pwd'" | sudo -i -u postgres psql
-echo "CREATE DATABASE movie_wish_db" | sudo -i -u postgres psql
+echo "CREATE DATABASE movie_dev" | sudo -i -u postgres psql
 echo "GRANT ALL PRIVILEGES ON DATABASE movie_wish_db TO movie_dev" | sudo -i -u postgres psql
-echo "\i 'posg.sql'" | sudo psql -h 127.0.0.1 -U movie_dev movie_wish_db
+echo "\i '../posg.sql'" | sudo psql -h 127.0.0.1 -U movie_dev movie_dev

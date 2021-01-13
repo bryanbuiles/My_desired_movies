@@ -17,6 +17,7 @@ The api is still under development and the database is not populate with movies 
 
 - [Environment](#environment-and-requirements)
 - [Run api locally](#Run-api-locally)
+- [Run api with Docker](#Run_api_with_Docker)
 - [Endpoints](#Endpoints)
 - [Folder Descriptions](#folder-descriptions)
 - [Future improvements](#Future-improvements)
@@ -53,7 +54,19 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
   ```
   ~/My_desired_movies$ go run main.go
   ```
-- Request the endpoints with curl or postmant:
+- Request the endpoints with curl or postmant.
+- ctrl + c to exit.
+
+## Run api with Docker
+
+- Access to My desired movies folder: `cd My_desired_movies`
+- Run Docker compose:
+  ```
+  ~/My_desired_movies$ docker-compose up --build
+  ```
+- Wait until docker finish. It may take several minutes.
+- Request the endpoints with curl or postmant.
+- ctrl + c to exit.
 
 ## Endpoints
 
@@ -167,9 +180,9 @@ This web-application was interpreted/tested on Ubuntu 20.04 LTS using go (versio
 ## Future improvements
 
 - Add testing to the api - On process
-- Docker
+- Docker - Done
 - Populate database with movies
-- Add Fronten
+- Add Frontend
 - Deploy
 
 ## Bugs
